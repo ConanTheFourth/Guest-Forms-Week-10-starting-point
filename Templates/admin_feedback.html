@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>All Feedbacks</h1>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Rating</th>
+            <th>Feedback</th>
+            <th>Created At</th>
+        </tr>
+        {% for feedback in feedbacks %}
+        <tr>
+            <td>{{ feedback.id }}</td>
+            <td>{{ feedback.rating }}</td>
+            <td>{{ feedback.feedback }}</td>
+            <td>{{ feedback.created_at }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    
+{% endblock %}
