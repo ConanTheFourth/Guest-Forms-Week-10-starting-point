@@ -195,27 +195,5 @@ def admin_feedback():
         db.session.rollback()
 
     feedbacks = Feedback.query.all()
-    # Ensure all 5-star feedbacks with text include reminder and save changes to DB
-    reminder = "\n\nReminder: Send a thank you message."
-    updated = False
-    for f in feedbacks:
-        if f.rating == 5 and f.feedback and reminder not in f.feedback:
-            f.feedback = f.feedback + reminder
-            updated = True
-    if updated:
-        try:
-            db.session.commit()
-        except Exception:
-            db.session.rollback()
-    return render_template('admin_feedback.html', feedbacks=feedbacks) + admin_nav_html()
-
-
-def create_app():
-    """Create and return the Flask app for use by flask CLI (FLASK_APP)."""
-    return app
-
-
-if __name__ == '__main__':
-    # Allows running with: python app.py
-    app.run(debug=True)
+    return render_template('admin_feedback.html', feedbacks=feedbacks)
 
