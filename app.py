@@ -149,10 +149,8 @@ def admin_non_related_profiles():
     # Profiles indicating non-related guests: coworkers or non-family members
     profiles = Profile.query.filter(
         or_(
-            Profile.rel.ilike('%cowork%'),
-            Profile.rel.ilike('%non%family%'),
-            Profile.rel.ilike('%non family%'),
-            Profile.rel.ilike('%non-family%')
+           Profile.rel.ilike('%coworker%'),
+           Profile.rel.ilike('%friend%')
         )
     ).all()
     return render_template('admin_profiles.html', profiles=profiles) + admin_nav_html()
@@ -177,12 +175,13 @@ def admin_index():
 
 def admin_nav_html():
     return ("<hr><div>Admin Directory: "
-            "<a href=\"/admin\">Directory</a> | "
             "<a href=\"/admin/profiles\">All Profiles</a> | "
             "<a href=\"/admin/profiles/siblings\">Sibling (&lt;3)</a> | "
             "<a href=\"/admin/profiles/high_capacity_or_accommodations\">High capacity or accommodations</a> | "
             "<a href=\"/admin/profiles/non_related\">Non-related (coworkers/non-family)</a> | "
-            "<a href=\"/admin/feedback\">Feedback</a>"
+            "<a href=\"/admin/feedback\">Feedback</a> | "
+            "<a href=\"/admin/feedback/positive\">Positive Feedback</a> | "
+            "<a href=\"/admin/feedback/negative\">Negative Feedback</a> | "
             "</div>")
 
 @app.route('/admin/feedback')
@@ -197,3 +196,12 @@ def admin_feedback():
     feedbacks = Feedback.query.all()
     return render_template('admin_feedback.html', feedbacks=feedbacks)
 
+@app.route('/admin/feedback/positive')
+def admin_feedback_positive():
+    feedbacks = Feedback.query.filter(Feedback.rating > 3).all()
+    return render_template('admin_feedback.html', feedbacks=feedbacks)
+
+@app.route('/admin/feedback/negative')
+def admin_feedback_negative():
+    feedbacks = Feedback.query.filter(Feedback.rating <= 3).all()
+    return render_template('admin_feedback.html', feedbacks=feedbacks)
